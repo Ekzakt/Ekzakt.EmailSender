@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekzakt.EmailSender.Core", "Ekzakt.EmailSender.Core\Ekzakt.EmailSender.Core.csproj", "{AEFC158E-998D-413D-9ADF-2F529C1754E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekzakt.EmailSender.Smtp", "Ekzakt.EmailSender.Smtp\Ekzakt.EmailSender.Smtp.csproj", "{B3E9EA90-051B-47BE-80F1-F34CE8A9ABB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEFC158E-998D-413D-9ADF-2F529C1754E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFC158E-998D-413D-9ADF-2F529C1754E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFC158E-998D-413D-9ADF-2F529C1754E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFC158E-998D-413D-9ADF-2F529C1754E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3E9EA90-051B-47BE-80F1-F34CE8A9ABB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3E9EA90-051B-47BE-80F1-F34CE8A9ABB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3E9EA90-051B-47BE-80F1-F34CE8A9ABB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3E9EA90-051B-47BE-80F1-F34CE8A9ABB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {419F1B40-9E03-4C49-A897-436B35EBDFE3}
+	EndGlobalSection
+EndGlobal
