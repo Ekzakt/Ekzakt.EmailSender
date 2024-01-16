@@ -5,32 +5,25 @@ the [MimeKit](https://github.com/jstedfast/MimeKit) and [MailKit](https://github
 
 ## Installation
 
-
-
 ### 1. Install package
 Use the NuGet Package Manager and search for Ekzakt.EmailSender.Smtp, or use the dotnet CLI:
 ``` C#
 dotnet add package Ekzakt.EmailSender.Smtp
 ```
 
-
-
 ### 3. Add the following code in the appsettings.json file.
 ```json
 "SmtpEmail": {
-	"FromAddress": "<YOUR_SENDER_EMAIL_ADDRESS>",
-	"FromDisplayName": "<YOUR_SENDER_NAME>",
-	"UserName": "<SMTP_USERNAME>",
+    "FromAddress": "<YOUR_SENDER_EMAIL_ADDRESS>",
+    "FromDisplayName": "<YOUR_SENDER_NAME>",
+    "UserName": "<SMTP_USERNAME>",
     "Password": "<SMTP_PASSWORD>",
     "Host": "<SMTP_SERVER_NAME>",
     "Port": "<SMTP_PORT_NUMBER>"
 }
 ```
 
-
-
 ### 2. Register the class in program.cs
-
 
 
 #### 1. Default setting
@@ -39,14 +32,12 @@ builder.Services.AddSmtpEmailSender();
 ```
 
 
-
 #### 2. Use a different secion name
 ``` C#
 builder.Services.AddSmtpEmailSender(<APPSETTINGS_SECTION_PATH>);
 ```
 where <APPSETTINGS_SECTION_PATH> is the name of the section in your appsettings.json file.
 If <APPSETTINGS_SECTION_PATH> is omitted, the default value "SmtpOptions" is used.
-
 
 
 #### 3. Use the settings from anywhere you get them:
