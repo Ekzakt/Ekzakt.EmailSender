@@ -1,5 +1,5 @@
 ﻿# Ekzakt.EmailSender.Core
-Package for implementing [Ekzakt.EmailSender.Smtp](https://github.com/Ekzakt/Ekzakt/tree/master/Ekzakt.EmailSender.Smtp) repo.
+This is a package for implementing the [Ekzakt.EmailSender.Smtp](https://github.com/Ekzakt/Ekzakt/tree/master/Ekzakt.EmailSender.Smtp) repo.
 
 ## Installation
 
