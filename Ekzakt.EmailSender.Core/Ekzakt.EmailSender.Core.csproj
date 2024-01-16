@@ -7,8 +7,8 @@
 		<Authors>Ekzakt</Authors>
 		<Company>Ekzakt</Company>
 		<Version>0.0.0</Version>
-		<Description>Implementation for Ekzakt.EmailSender.Smtp</Description>
-		<PackageProjectUrl>https://github.com/Ekzakt/Ekzakt.EmailSender/tree/master/Ekzakt.EmailSender.Core</PackageProjectUrl>
+		<Description>Package  for Ekzakt.EmailSender.Smtp</Description>
+		<PackageProjectUrl>https://github.com/Ekzakt/Ekzakt.EmailSender</PackageProjectUrl>
 		<PackageTags>email, ekzakt</PackageTags>
 	</PropertyGroup>
 

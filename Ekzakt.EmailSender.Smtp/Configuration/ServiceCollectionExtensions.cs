@@ -15,8 +15,10 @@ public static class ServiceCollectionExtensions
     }
 
 
-    public static IServiceCollection AddSmtpEmailSender(this IServiceCollection services, string configSectionPath)
+    public static IServiceCollection AddSmtpEmailSender(this IServiceCollection services, string? configSectionPath = null)
     {
+        configSectionPath ??= SmtpEmailSenderOptions.OptionsName;
+
         services.AddOptions<SmtpEmailSenderOptions>()
             .BindConfiguration(configSectionPath);
 
@@ -24,5 +26,4 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-
 }
