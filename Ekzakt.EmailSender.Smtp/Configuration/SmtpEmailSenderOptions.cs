@@ -1,5 +1,4 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
-using System.ComponentModel.DataAnnotations;
 
 namespace Ekzakt.EmailSender.Smtp.Configuration;
 
