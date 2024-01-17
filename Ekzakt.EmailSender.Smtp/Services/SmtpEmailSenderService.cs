@@ -6,30 +6,30 @@ using Ekzakt.EmailSender.Core.Models;
 using Ekzakt.EmailSender.Core.Contracts;
 using Microsoft.Extensions.Options;
 
-namespace Ekzakt.EmailSender.Smtp;
+namespace Ekzakt.EmailSender.Smtp.Services;
 
 public class SmtpEmailSenderService(
-    ILogger<SmtpEmailSenderService> logger, 
+    ILogger<SmtpEmailSenderService> logger,
     IOptions<SmtpEmailSenderOptions> options) : IEmailSenderService
 {
     private readonly ILogger<SmtpEmailSenderService> _logger = logger;
     private SmtpEmailSenderOptions _options = options.Value;
-
     private SendEmailRequest _sendEmailRequest = new();
 
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendRequest)
     {
         _sendEmailRequest = sendRequest;
-        
+
         return await SendAsync();
     }
 
 
 
+
     #region Helpers
 
-    private async Task<SendEmailResponse> SendAsync()
+    private async Task<SendEmailResponse> SendAsync(CancellationToken cancellationToken = default)
     {
         MimeMessage mimeMessage = BuildMimeMessage();
 
@@ -37,8 +37,14 @@ public class SmtpEmailSenderService(
 
         try
         {
-            await smtp.ConnectAsync(_options.Host, _options.Port);
-            await smtp.AuthenticateAsync(_options.UserName, _options.Password);
+            await smtp.ConnectAsync(
+                host: _options.Host, 
+                port: _options.Port, 
+                cancellationToken: cancellationToken);
+
+            await smtp.AuthenticateAsync(
+                _options.UserName, 
+                _options.Password);
 
             var result = await smtp.SendAsync(mimeMessage);
 
@@ -99,7 +105,7 @@ public class SmtpEmailSenderService(
 
         foreach (var emailAddress in emailAddresses ?? new List<EmailAddress>())
         {
-            addressesList.Add(new MailboxAddress(emailAddress.Name, emailAddress.Address));
+            addressesList.Add(new MailboxAddress(emailAddress.Name ?? string.Empty, emailAddress.Address));
         }
 
         return addressesList;

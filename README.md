@@ -1,9 +1,10 @@
 # Ekzakt.EmailSender
-Packages for sending emails via an smtp-server and is merely a small wrapper around
-the [MimeKit](https://github.com/jstedfast/MimeKit) and [MailKit](https://github.com/jstedfast/MailKit) repo.
+Packages for sending emails via an smtp-server It is merely a small and simple wrapper around
+the [MimeKit](https://github.com/jstedfast/MimeKit) and [MailKit](https://github.com/jstedfast/MailKit) repos.
 
 
 ## Installation
+
 
 ### 1. Install package
 Use the NuGet Package Manager and search for Ekzakt.EmailSender.Smtp, or use the dotnet CLI:
@@ -11,7 +12,8 @@ Use the NuGet Package Manager and search for Ekzakt.EmailSender.Smtp, or use the
 dotnet add package Ekzakt.EmailSender.Smtp
 ```
 
-### 3. Add the following code in the appsettings.json file.
+
+### 3. Add the following settings to the appsettings.json file.
 ```json
 "SmtpEmail": {
     "FromAddress": "<YOUR_SENDER_EMAIL_ADDRESS>",
@@ -23,10 +25,11 @@ dotnet add package Ekzakt.EmailSender.Smtp
 }
 ```
 
-### 2. Register the class in program.cs
+
+### 2. Register the class DI in program.cs
 
 
-#### 1. Default setting
+#### 1. Default
 ``` C#
 builder.Services.AddSmtpEmailSender();
 ```
@@ -55,7 +58,6 @@ builder.Services.AddSmtpEmailSender(options =>
 
 
 ### 4. Usage
-
 ``` C#
 public class Demo(IEmailSenderService emailSenderService)
 {
@@ -72,7 +74,7 @@ public class Demo(IEmailSenderService emailSenderService)
 
         var result = await _emailSenderService.SendAsync(request);
 
-        result;
+        return result;
     }
 }
 ```

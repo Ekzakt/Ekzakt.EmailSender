@@ -15,6 +15,7 @@ public class EmailAddress
 
 
     public string Address { get; private set; } = string.Empty;
+
     public string? Name { get; private set; } = string.Empty;
 
 }

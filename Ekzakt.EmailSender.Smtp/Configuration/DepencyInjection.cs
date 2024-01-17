@@ -1,9 +1,10 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
+using Ekzakt.EmailSender.Smtp.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ekzakt.EmailSender.Smtp.Configuration;
 
-public static class ServiceCollectionExtensions
+public static class DepencyInjection
 {
     public static IServiceCollection AddSmtpEmailSender(this IServiceCollection services, Action<SmtpEmailSenderOptions> options)
     {
@@ -19,10 +20,11 @@ public static class ServiceCollectionExtensions
     {
         configSectionPath ??= SmtpEmailSenderOptions.OptionsName;
 
-        services.AddOptions<SmtpEmailSenderOptions>()
+        services
+            .AddOptions<SmtpEmailSenderOptions>()
             .BindConfiguration(configSectionPath);
 
-        services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
+        services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
 
         return services;
     }
