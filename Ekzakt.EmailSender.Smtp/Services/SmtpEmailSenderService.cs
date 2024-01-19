@@ -26,7 +26,6 @@ public class SmtpEmailSenderService(
 
 
 
-
     #region Helpers
 
     private async Task<SendEmailResponse> SendAsync(CancellationToken cancellationToken = default)
@@ -37,16 +36,22 @@ public class SmtpEmailSenderService(
 
         try
         {
+            _logger.LogInformation("Connecting to SMTP-server.");
             await smtp.ConnectAsync(
                 host: _options.Host, 
                 port: _options.Port, 
                 cancellationToken: cancellationToken);
+            _logger.LogInformation("Connect successfully to SMTP-server.");
 
+            _logger.LogInformation("Authentication SMPT-server.");
             await smtp.AuthenticateAsync(
                 _options.UserName, 
                 _options.Password);
+            _logger.LogInformation("Authenticated successfully.");
 
+            _logger.LogInformation("Sending email.");
             var result = await smtp.SendAsync(mimeMessage);
+            _logger.LogInformation($"Email sent successfully with response {result}");
 
             return new SendEmailResponse { ServerResponse = result };
         }

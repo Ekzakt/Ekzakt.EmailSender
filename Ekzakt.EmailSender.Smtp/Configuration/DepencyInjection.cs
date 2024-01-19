@@ -24,7 +24,7 @@ public static class DepencyInjection
             .AddOptions<SmtpEmailSenderOptions>()
             .BindConfiguration(configSectionPath);
 
-        services.AddTransient<IEmailSenderService, SmtpEmailSenderService>();
+        services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
 
         return services;
     }
