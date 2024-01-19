@@ -36,8 +36,11 @@ public class SmtpEmailSenderService(
 
         try
         {
-            _logger.LogInformation($"Sending email with subject \"{_sendEmailRequest.Subject}\" to \"{_sendEmailRequest.Tos?.FirstOrDefault()?.Address}\".");
-            _logger.LogDebug($"Connecting to SMTP-server {_options.Host} on port {_options.Port}.");
+            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".",
+                _sendEmailRequest.Subject,
+                _sendEmailRequest.Tos?.FirstOrDefault()?.Address);
+            _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
+
             await smtp.ConnectAsync(
                 host: _options.Host, 
                 port: _options.Port, 
@@ -52,13 +55,13 @@ public class SmtpEmailSenderService(
 
             _logger.LogDebug("Sending email.");
             var result = await smtp.SendAsync(mimeMessage);
-            _logger.LogDebug($"Email successfully sent with response {result}.");
+            _logger.LogDebug("Email successfully sent with response {0}.", result);
 
             return new SendEmailResponse { ServerResponse = result };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message, ex);
+            _logger.LogError("Something went wrong whiel sending and email. Exception: {0}", ex);
 
             return new SendEmailResponse { ServerResponse = ex.Message };
         }
