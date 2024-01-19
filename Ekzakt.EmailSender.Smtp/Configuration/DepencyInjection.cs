@@ -1,5 +1,7 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
 using Ekzakt.EmailSender.Smtp.Services;
+using Ekzakt.EmailSender.Smtp.Validators;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ekzakt.EmailSender.Smtp.Configuration;
@@ -10,7 +12,7 @@ public static class DepencyInjection
     {
         services.Configure(options);
 
-        services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
+        services.AddSmtpEmailSender();
 
         return services;
     }
@@ -24,8 +26,23 @@ public static class DepencyInjection
             .AddOptions<SmtpEmailSenderOptions>()
             .BindConfiguration(configSectionPath);
 
+        services.AddSmtpEmailSender(); 
+        
+        return services;
+    }
+
+
+
+
+    #region Helpers
+
+    private static IServiceCollection AddSmtpEmailSender(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<SmtpEmailSenderOptions>, SmtpEmailSenderOptionsValidator>();
         services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
 
         return services;
     }
+
+    #endregion Helpers
 }

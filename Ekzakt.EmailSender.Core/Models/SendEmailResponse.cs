@@ -2,7 +2,12 @@
 
 public class SendEmailResponse
 {
-    public string? ServerResponse { get; set; }
+    public SendEmailResponse(string serverResponse)
+    {
+        ServerResponse = serverResponse;    
+    }
+
+    public string? ServerResponse { get; init; }
 
     public bool IsSuccess => ServerResponse is null ? false : ServerResponse.Contains(" queued as");
 }

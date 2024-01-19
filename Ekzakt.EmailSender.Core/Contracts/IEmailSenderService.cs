@@ -4,5 +4,5 @@ namespace Ekzakt.EmailSender.Core.Contracts;
 
 public interface IEmailSenderService
 {
-    Task<SendEmailResponse> SendAsync(SendEmailRequest request);
+    Task<SendEmailResponse> SendAsync(SendEmailRequest request, CancellationToken cancellationToken = default);
 }
