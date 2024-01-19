@@ -52,7 +52,7 @@ builder.Services.AddSmtpEmailSender(options =>
     options.UserName = "<SMTP_USERNAME>";
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOST_NAME>";
-    options.Port = "<SMTP_PORT_NUMER>;
+    options.Port = "<SMTP_PORT_NUMER>";
 });
 ```
 
