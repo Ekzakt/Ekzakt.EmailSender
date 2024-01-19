@@ -4,7 +4,7 @@ namespace Ekzakt.EmailSender.Smtp.Configuration;
 
 public class SmtpEmailSenderOptions : IEmailSenderOptions
 {
-    public const string OptionsName = "SmtpEmail";
+    public const string OptionsName = "Ekzakt:SmtpEmail";
 
     public string FromAddress { get; set; } = string.Empty;
 
@@ -19,4 +19,5 @@ public class SmtpEmailSenderOptions : IEmailSenderOptions
     public int Port { get; set; } = 587;
 
     public bool UseSSL { get; set; } = true;
+
 }
