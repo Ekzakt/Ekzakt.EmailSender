@@ -26,7 +26,7 @@ dotnet add package Ekzakt.EmailSender.Smtp
 ```
 
 
-### 2. Register the class DI in program.cs
+### 2. Register the class in program.cs
 
 
 #### 1. Default
@@ -35,7 +35,7 @@ builder.Services.AddSmtpEmailSender();
 ```
 
 
-#### 2. Use a different secion name
+#### 2. Use a different appsettings.json section name
 ``` C#
 builder.Services.AddSmtpEmailSender(<APPSETTINGS_SECTION_PATH>);
 ```
@@ -52,7 +52,7 @@ builder.Services.AddSmtpEmailSender(options =>
     options.UserName = "<SMTP_USERNAME>";
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOST_NAME>";
-    options.Port = <SMTP_PORT_NUMER>;
+    options.Port = "<SMTP_PORT_NUMER>;
 });
 ```
 
@@ -69,8 +69,8 @@ public class Demo(IEmailSenderService emailSenderService)
 
         request.Tos.Add(new EmailAddress("johndoe@domain.com, "John Doe"));
         request.Subject = "Send demo email";
-        request.HtmlBody = "<h1>HtmlBody</h1><p>HtmlBody</p>";
-        request.TextBody = "TextBody";
+        request.HtmlBody = "<h1>Html Header</h1><p>Html Body</p>";
+        request.TextBody = "Text Body";
 
         var result = await _emailSenderService.SendAsync(request);
 
