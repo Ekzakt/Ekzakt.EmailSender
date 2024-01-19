@@ -9,11 +9,9 @@ using Microsoft.Extensions.Options;
 namespace Ekzakt.EmailSender.Smtp.Services;
 
 public class SmtpEmailSenderService(
-    ILogger<SmtpEmailSenderService> logger,
-    IOptions<SmtpEmailSenderOptions> options) : IEmailSenderService
+    ILogger<SmtpEmailSenderService> _logger,
+    IOptions<SmtpEmailSenderOptions> _options) : IEmailSenderService
 {
-    private readonly ILogger<SmtpEmailSenderService> _logger = logger;
-    private SmtpEmailSenderOptions _options = options.Value;
     private SendEmailRequest _sendEmailRequest = new();
 
 
@@ -39,18 +37,18 @@ public class SmtpEmailSenderService(
             _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".",
                 _sendEmailRequest.Subject,
                 _sendEmailRequest.Tos?.FirstOrDefault()?.Address);
-            _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
+            _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Value.Host, _options.Value.Port);
 
             await smtp.ConnectAsync(
-                host: _options.Host, 
-                port: _options.Port, 
+                host: _options.Value.Host, 
+                port: _options.Value.Port, 
                 cancellationToken: cancellationToken);
             _logger.LogDebug("Connected successfully.");
 
             _logger.LogDebug("Authenticating SMPT-server.");
             await smtp.AuthenticateAsync(
-                _options.UserName, 
-                _options.Password);
+                _options.Value.UserName, 
+                _options.Value.Password);
             _logger.LogDebug("Authenticated successfully.");
 
             _logger.LogDebug("Sending email.");
@@ -78,8 +76,8 @@ public class SmtpEmailSenderService(
         MimeMessage mimeMessage = new();
 
         mimeMessage.Sender = new MailboxAddress(
-                _sendEmailRequest?.From?.Name ?? _options.FromDisplayName,
-                _sendEmailRequest?.From?.Address ?? _options.FromAddress);
+                _sendEmailRequest?.From?.Name ?? _options.Value.FromDisplayName ?? string.Empty,
+                _sendEmailRequest?.From?.Address ?? _options.Value.FromAddress);
 
         mimeMessage.Subject = GetEmailSubject(_sendEmailRequest?.Subject);
 
