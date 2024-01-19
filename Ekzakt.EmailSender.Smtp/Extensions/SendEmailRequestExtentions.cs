@@ -26,12 +26,12 @@ public static class SendEmailRequestExtentions
 
     public static MimeEntity ToMimeMessageBody(this SendEmailRequest emailRequest)
     {
-        ArgumentException.ThrowIfNullOrEmpty(emailRequest.HtmlBody);
+        ArgumentException.ThrowIfNullOrEmpty(emailRequest.Body.Html);
 
         BodyBuilder bodyBuilder = new();
 
-        bodyBuilder.HtmlBody = emailRequest.HtmlBody;
-        bodyBuilder.TextBody = emailRequest.TextBody ?? string.Empty;
+        bodyBuilder.HtmlBody = emailRequest.Body.Html;
+        bodyBuilder.TextBody = emailRequest.Body.PlainText ?? string.Empty;
 
         return bodyBuilder.ToMessageBody();
     }

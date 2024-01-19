@@ -21,14 +21,9 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
             .NotEmpty()
             .Length(1, int.MaxValue);
 
-
         RuleFor(x => x.Host).Must(host => 
             Regex.Match(host, RegexConstants.HostName).Success || 
             Regex.Match(host, RegexConstants.IpAddress).Success);
-
-        //RuleFor(x => x.Host)
-        //    .Matches(RegexConstants.HostName);
-            //.Matches(RegexValidators.IpAddress);
 
         RuleFor(x => x.Port)
             .InclusiveBetween(1, 65535);

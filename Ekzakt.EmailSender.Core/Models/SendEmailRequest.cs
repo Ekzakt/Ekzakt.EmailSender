@@ -12,7 +12,6 @@ public class SendEmailRequest
 
     public string Subject { get; set; } = string.Empty;
 
-    public string HtmlBody { get; set; } = string.Empty;
+    public EmailBody Body { get; set; } = new();
 
-    public string? TextBody { get; set; } = string.Empty;
 }
