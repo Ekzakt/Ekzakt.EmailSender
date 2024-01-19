@@ -36,22 +36,23 @@ public class SmtpEmailSenderService(
 
         try
         {
-            _logger.LogInformation($"Connecting to SMTP-server {_options.Host} on port {_options.Port}.");
+            _logger.LogInformation($"Sending email with subject \"{_sendEmailRequest.Subject}\" to \"{_sendEmailRequest.Tos?.FirstOrDefault()?.Address}\".");
+            _logger.LogDebug($"Connecting to SMTP-server {_options.Host} on port {_options.Port}.");
             await smtp.ConnectAsync(
                 host: _options.Host, 
                 port: _options.Port, 
                 cancellationToken: cancellationToken);
-            _logger.LogInformation("Connected successfully.");
+            _logger.LogDebug("Connected successfully.");
 
-            _logger.LogInformation("Authenticating SMPT-server.");
+            _logger.LogDebug("Authenticating SMPT-server.");
             await smtp.AuthenticateAsync(
                 _options.UserName, 
                 _options.Password);
-            _logger.LogInformation("Authenticated successfully.");
+            _logger.LogDebug("Authenticated successfully.");
 
-            _logger.LogInformation("Sending email.");
+            _logger.LogDebug("Sending email.");
             var result = await smtp.SendAsync(mimeMessage);
-            _logger.LogInformation($"Email successfully sent with response {result}.");
+            _logger.LogDebug($"Email successfully sent with response {result}.");
 
             return new SendEmailResponse { ServerResponse = result };
         }
@@ -63,6 +64,7 @@ public class SmtpEmailSenderService(
         }
         finally
         {
+            _logger.LogDebug("Disonnecting from SMTP-server.");
             await smtp.DisconnectAsync(true);
         }
     }
