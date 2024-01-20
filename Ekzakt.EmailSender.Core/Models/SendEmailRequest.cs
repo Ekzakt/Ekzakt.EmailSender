@@ -2,7 +2,7 @@
 
 public class SendEmailRequest
 {
-    public EmailAddress From { get; set; }
+    public EmailAddress From { get; set; } = new();
 
     public List<EmailAddress> Tos { get; set; } = new();
 

@@ -2,6 +2,9 @@
 
 public class EmailAddress
 {
+    public EmailAddress() { }
+
+
     public EmailAddress(string address)
     {
         Address = address;
@@ -13,8 +16,9 @@ public class EmailAddress
         Name = name;
     }
 
-    public string Address { get; private set; } = string.Empty;
+    
+    public string Address { get; set; } = string.Empty;
 
-    public string? Name { get; private set; } = string.Empty;
+    public string? Name { get; set; } = string.Empty;
 
 }
