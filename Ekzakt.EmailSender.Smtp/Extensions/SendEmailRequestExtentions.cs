@@ -5,13 +5,13 @@ namespace Ekzakt.EmailSender.Smtp.Extensions;
 
 public static class SendEmailRequestExtentions
 {
-    public static MimeMessage ToMimeMessage(this SendEmailRequest emailRequest, string? senderDisplayName, string senderEmail)
+    public static MimeMessage ToMimeMessage(this SendEmailRequest emailRequest)
     {
         MimeMessage mimeMessage = new();
 
         mimeMessage.Sender = new MailboxAddress(
-                emailRequest?.From?.Name ?? senderDisplayName ?? string.Empty,
-                emailRequest?.From?.Address ?? senderEmail);
+                emailRequest?.From?.Name ?? string.Empty,
+                emailRequest?.From?.Address);
 
         mimeMessage.To.AddRange(emailRequest?.Tos.ToInternetAddressList());
         mimeMessage.Cc.AddRange(emailRequest?.Ccs?.ToInternetAddressList());

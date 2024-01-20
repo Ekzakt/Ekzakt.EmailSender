@@ -34,9 +34,10 @@ public class SmtpEmailSenderService : IEmailSenderService
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
-        _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
-
         _sendEmailRequest = sendEmailRequest;
+        _sendEmailRequest.From = new EmailAddress(_options.FromAddress, _options.FromDisplayName);
+
+        _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
 
         return await SendAsync();
     }
@@ -46,7 +47,7 @@ public class SmtpEmailSenderService : IEmailSenderService
 
     private async Task<SendEmailResponse> SendAsync(CancellationToken cancellationToken = default)
     {
-        MimeMessage mimeMessage = _sendEmailRequest.ToMimeMessage(_options.FromDisplayName, _options.FromAddress);
+        MimeMessage mimeMessage = _sendEmailRequest.ToMimeMessage();
 
         using var smtp = new SmtpClient();
 
@@ -82,6 +83,7 @@ public class SmtpEmailSenderService : IEmailSenderService
         finally
         {
             _logger.LogDebug("Disonnecting from SMTP-server.");
+
             await smtp.DisconnectAsync(true);
         }
     }
