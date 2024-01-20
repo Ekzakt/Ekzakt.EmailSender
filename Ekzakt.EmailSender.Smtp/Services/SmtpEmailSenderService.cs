@@ -24,11 +24,11 @@ public class SmtpEmailSenderService : IEmailSenderService
         IValidator<SmtpEmailSenderOptions> optionsValidator,
         IValidator<SendEmailRequest> sendEmailRequstValidator)
     {
+        optionsValidator.ValidateAndThrow(options.Value);
+
         _logger = logger;
         _options = options.Value;
         _sendEmailRequstValidator = sendEmailRequstValidator;
-
-        optionsValidator.ValidateAndThrow(_options);
     }
 
 
