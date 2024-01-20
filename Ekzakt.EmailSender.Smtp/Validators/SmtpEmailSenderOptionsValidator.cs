@@ -23,7 +23,7 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
 
         RuleFor(x => x.Host).Must(host => 
             Regex.Match(host, RegexConstants.HOST_NAME).Success || 
-            Regex.Match(host, RegexConstants.IP_ADDRESS).Success);
+            Regex.Match(host, RegexConstants.IPv4_ADDRESS).Success);
 
         RuleFor(x => x.Port)
             .InclusiveBetween(1, 65535);
