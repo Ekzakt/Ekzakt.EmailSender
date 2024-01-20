@@ -14,23 +14,28 @@ public class SmtpEmailSenderService : IEmailSenderService
 {
     private readonly ILogger<SmtpEmailSenderService> _logger;
     private readonly SmtpEmailSenderOptions _options;
+    private readonly IValidator<SendEmailRequest> _sendEmailRequstValidator;
 
     private SendEmailRequest _sendEmailRequest = new();
 
     public SmtpEmailSenderService(
         ILogger<SmtpEmailSenderService> logger, 
         IOptions<SmtpEmailSenderOptions> options, 
-        IValidator<SmtpEmailSenderOptions> optionsValidator)
+        IValidator<SmtpEmailSenderOptions> optionsValidator,
+        IValidator<SendEmailRequest> sendEmailRequstValidator)
     {
         _logger = logger;
         _options = options.Value;
+        _sendEmailRequstValidator = sendEmailRequstValidator;
 
-        _options.Validate(optionsValidator);
+        optionsValidator.ValidateAndThrow(_options);
     }
 
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
+        _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
+
         _sendEmailRequest = sendEmailRequest;
 
         return await SendAsync();

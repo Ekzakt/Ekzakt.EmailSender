@@ -1,4 +1,6 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
+using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Core.Validators;
 using Ekzakt.EmailSender.Smtp.Services;
 using Ekzakt.EmailSender.Smtp.Validators;
 using FluentValidation;
@@ -39,6 +41,10 @@ public static class DepencyInjection
     private static IServiceCollection AddSmtpEmailSender(this IServiceCollection services)
     {
         services.AddScoped<IValidator<SmtpEmailSenderOptions>, SmtpEmailSenderOptionsValidator>();
+        services.AddScoped<IValidator<SendEmailRequest>, SendEmailRequestValidator>();
+        services.AddScoped<IValidator<EmailBody>, EmailBodyValidator>();
+        services.AddScoped<IValidator<EmailAddress>, EmailAddressValidator>();
+
         services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
 
         return services;

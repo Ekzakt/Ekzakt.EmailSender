@@ -13,7 +13,6 @@ public class EmailAddress
         Name = name;
     }
 
-
     public string Address { get; private set; } = string.Empty;
 
     public string? Name { get; private set; } = string.Empty;
