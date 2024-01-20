@@ -67,7 +67,7 @@ public class Demo(IEmailSenderService emailSenderService)
     {
         SendEmailRequest request = new();
 
-        request.Tos.Add(new EmailAddress("johndoe@domain.com, "John Doe"));
+        request.Tos.Add(new EmailAddress("johndoe@domain.com", "John Doe"));
         request.Subject = "Send demo email";
         request.HtmlBody = "<h1>Html Header</h1><p>Html Body</p>";
         request.TextBody = "Text Body";
