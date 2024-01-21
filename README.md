@@ -16,11 +16,11 @@ dotnet add package Ekzakt.EmailSender.Smtp
 ### 3. Add the following settings to the appsettings.json file.
 ```json
 "SmtpEmail": {
-    "FromAddress": "<YOUR_SENDER_EMAIL_ADDRESS>",
-    "FromDisplayName": "<YOUR_SENDER_NAME>",
+    "FromAddress": "<SENDER_EMAIL_ADDRESS>",
+    "FromDisplayName": "<SENDER_DISPLAY_NAME>",
     "UserName": "<SMTP_USERNAME>",
     "Password": "<SMTP_PASSWORD>",
-    "Host": "<SMTP_SERVER_NAME>",
+    "Host": "<SMTP_HOST_NAME>",
     "Port": "<SMTP_PORT_NUMBER>"
 }
 ```
@@ -47,17 +47,17 @@ If <APPSETTINGS_SECTION_PATH> is omitted, the default value "SmtpOptions" is use
 ``` C#
 builder.Services.AddSmtpEmailSender(options =>
 {
-    options.FromAddress = "<YOUR_SENDER_EMAIL_ADDRESS>";
-    options.FromDisplayName = "<YOUR_SENDER_NAME>";
+    options.FromAddress = "<SENDER_EMAIL_ADDRESS>";
+    options.FromDisplayName = "<SENDER_DISPLAY_NAME>";
     options.UserName = "<SMTP_USERNAME>";
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOST_NAME>";
-    options.Port = "<SMTP_PORT_NUMER>";
+    options.Port = "<SMTP_PORT_NUMBER>";
 });
 ```
 
 
-### 4. Usage
+### 3. Usage
 ``` C#
 public class Demo(IEmailSenderService emailSenderService)
 {
