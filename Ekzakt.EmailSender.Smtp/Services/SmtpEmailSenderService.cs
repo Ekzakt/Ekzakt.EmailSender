@@ -35,20 +35,7 @@ public class SmtpEmailSenderService : IEmailSenderService
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
         _sendEmailRequest = sendEmailRequest;
-
-        if (!string.IsNullOrEmpty(_options.FromAddress))
-        { 
-            _logger.LogWarning("FromAddress is obsolete.  You should uss SenderAddress instead.");
-        }
-
-        _sendEmailRequest.Sender = new EmailAddress(
-            string.IsNullOrEmpty(_options.SenderAddress)
-                ? _options.FromAddress
-                : _options.SenderAddress,
-            string.IsNullOrEmpty(_options.SenderDisplayName)
-                ? _options.FromDisplayName
-                : _options.SenderDisplayName
-                );
+        _sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
 
         _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
 
