@@ -10,8 +10,8 @@ public static class SendEmailRequestExtentions
         MimeMessage mimeMessage = new();
 
         mimeMessage.Sender = new MailboxAddress(
-                emailRequest?.From?.Name ?? string.Empty,
-                emailRequest?.From?.Address);
+                emailRequest?.Sender?.Name ?? string.Empty,
+                emailRequest?.Sender?.Address);
 
         mimeMessage.To.AddRange(emailRequest?.Tos.ToInternetAddressList());
         mimeMessage.Cc.AddRange(emailRequest?.Ccs?.ToInternetAddressList());
