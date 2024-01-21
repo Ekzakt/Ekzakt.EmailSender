@@ -10,7 +10,7 @@ public class SendEmailRequestValidator : AbstractValidator<SendEmailRequest>
         RuleFor(x => x.Body.Html)
             .NotNull().NotEmpty();
 
-        RuleFor(x => x.From)
+        RuleFor(x => x.Sender)
             .SetValidator(new EmailAddressValidator());
 
         RuleForEach(x => x.Tos)

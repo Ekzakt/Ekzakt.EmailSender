@@ -6,9 +6,15 @@ public class SmtpEmailSenderOptions : IEmailSenderOptions
 {
     public const string OptionsName = "Ekzakt:SmtpEmail";
 
+    [Obsolete("Use SenderAddress instead.  FromAddress wil be removed in future versions.")]
     public string FromAddress { get; set; } = string.Empty;
 
+    [Obsolete("Use SenderDisplayName instead. FromDisplayName wil be removed in future versions.")]
     public string FromDisplayName { get; set; } = string.Empty;
+
+    public string SenderAddress { get; set; } = string.Empty;
+
+    public string SenderDisplayName { get; set; } = string.Empty;
 
     public string UserName { get; set; } = string.Empty;
 

@@ -2,7 +2,10 @@
 
 public class SendEmailRequest
 {
+    [Obsolete("Use Sender instead. From will be removed in future versions.")]
     public EmailAddress From { get; set; } = new();
+
+    public EmailAddress Sender { get; set; } = new();
 
     public List<EmailAddress> Tos { get; set; } = new();
 

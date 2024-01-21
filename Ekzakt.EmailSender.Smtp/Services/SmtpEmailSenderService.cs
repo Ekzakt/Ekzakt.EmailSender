@@ -35,7 +35,7 @@ public class SmtpEmailSenderService : IEmailSenderService
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
         _sendEmailRequest = sendEmailRequest;
-        _sendEmailRequest.From = new EmailAddress(_options.FromAddress, _options.FromDisplayName);
+        _sendEmailRequest.Sender = new EmailAddress(_options.FromAddress, _options.FromDisplayName);
 
         _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
 
@@ -87,6 +87,7 @@ public class SmtpEmailSenderService : IEmailSenderService
             await smtp.DisconnectAsync(true);
         }
     }
+
 
     #endregion Helpers
 }

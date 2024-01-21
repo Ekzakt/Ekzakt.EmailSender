@@ -9,7 +9,12 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
     public SmtpEmailSenderOptionsValidator()
     {
         RuleFor(x => x.FromAddress)
-            .EmailAddress();
+            .EmailAddress()
+            .When(x => string.IsNullOrEmpty(x.SenderAddress));
+
+        RuleFor(x => x.SenderAddress)
+            .EmailAddress()
+            .When(x => string.IsNullOrEmpty(x.FromAddress));
 
         RuleFor(x => x.UserName)
             .NotNull()
