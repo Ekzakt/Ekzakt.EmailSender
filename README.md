@@ -15,13 +15,15 @@ dotnet add package Ekzakt.EmailSender.Smtp
 
 ### 3. Add the following settings to the appsettings.json file.
 ```json
-"SmtpEmail": {
-    "SenderAddress": "<SENDER_EMAIL_ADDRESS>",
-    "SenderDisplayName": "<SENDER_DISPLAY_NAME>",
+"Ekzakt": {
+  "SmtpEmail": {
+    "SenderAddress": "<SENDER_EMAILADDRESS>",
+    "SenderDisplayName": "<SENDER_DISPLAYNAME>",
     "UserName": "<SMTP_USERNAME>",
     "Password": "<SMTP_PASSWORD>",
-    "Host": "<SMTP_HOST_NAME>",
-    "Port": "<SMTP_PORT_NUMBER>"
+    "Host": "<SMTP_HOSTNAME>",
+    "Port": "<SMTP_PORTNUMBER>"
+  }
 }
 ```
 
@@ -47,12 +49,12 @@ If <APPSETTINGS_SECTION_PATH> is omitted, the default value "SmtpOptions" is use
 ``` C#
 builder.Services.AddSmtpEmailSender(options =>
 {
-    options.SenderAddress = "<SENDER_EMAIL_ADDRESS>";
-    options.SenderDisplayName = "<SENDER_DISPLAY_NAME>";
+    options.SenderAddress = "<SENDER_EMAILADDRESS>";
+    options.SenderDisplayName = "<SENDER_DISPLAYNAME>";
     options.UserName = "<SMTP_USERNAME>";
     options.Password = "<SMTP_PASSWORD>";
-    options.Host = "<SMTP_HOST_NAME>";
-    options.Port = "<SMTP_PORT_NUMBER>";
+    options.Host = "<SMTP_HOSTNAME>";
+    options.Port = "<SMTP_PORTNUMBER>";
 });
 ```
 
