@@ -64,7 +64,7 @@ public class SmtpEmailSenderService : IEmailSenderService
 
 
             _logger.LogDebug("Authenticating SMPT-server.");
-            await smtp.AuthenticateAsync(_options.UserName, _options.Password);
+            await smtp.AuthenticateAsync(_options.Username, _options.Password);
             _logger.LogDebug("Authenticated successfully.");
 
 

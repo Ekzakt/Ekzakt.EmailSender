@@ -13,7 +13,7 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
             .NotEmpty()
             .EmailAddress();
 
-        RuleFor(x => x.UserName)
+        RuleFor(x => x.Username)
             .NotNull()
             .NotEmpty()
             .Length(1, 320);
