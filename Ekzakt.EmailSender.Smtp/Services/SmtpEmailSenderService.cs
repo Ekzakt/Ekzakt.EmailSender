@@ -78,7 +78,7 @@ public class SmtpEmailSenderService : IEmailSenderService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Something went wrong whiel sending and email. Exception: {0}", ex);
+            _logger.LogError("Something went wrong while sending and email. Exception: {0}", ex);
 
             return new SendEmailResponse(ex.Message);
         }
