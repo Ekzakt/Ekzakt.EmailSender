@@ -23,6 +23,7 @@ dotnet add package Ekzakt.EmailSender.Smtp
     "Password": "<SMTP_PASSWORD>",
     "Host": "<SMTP_HOSTNAME>",
     "Port": "<SMTP_PORTNUMBER>"
+    "UseSSL": <BOOLEAN>
   }
 }
 ```
@@ -55,6 +56,7 @@ builder.Services.AddSmtpEmailSender(options =>
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOSTNAME>";
     options.Port = "<SMTP_PORTNUMBER>";
+    options.UseSSL = <BOOLEAN>
 });
 ```
 

@@ -37,6 +37,10 @@ public class SmtpEmailSenderService : IEmailSenderService
         _sendEmailRequest = sendEmailRequest;
         _sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
 
+
+        // TODO: This is sooo bad and caused so many issues.
+        // Remove this and when options are invalidate, return
+        // a proper response!
         _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
 
         return await SendAsync();
