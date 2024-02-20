@@ -23,6 +23,7 @@ dotnet add package Ekzakt.EmailSender.Smtp
     "Password": "<SMTP_PASSWORD>",
     "Host": "<SMTP_HOSTNAME>",
     "Port": "<SMTP_PORTNUMBER>"
+    "UseSSL": <BOOLEAN>
   }
 }
 ```
@@ -55,6 +56,7 @@ builder.Services.AddSmtpEmailSender(options =>
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOSTNAME>";
     options.Port = "<SMTP_PORTNUMBER>";
+    options.UseSSL = <BOOLEAN>
 });
 ```
 
@@ -71,8 +73,8 @@ public class Demo(IEmailSenderService emailSenderService)
 
         request.Tos.Add(new EmailAddress("johndoe@domain.com", "John Doe"));
         request.Subject = "Send demo email";
-        request.HtmlBody = "<h1>Html Header</h1><p>Html Body</p>";
-        request.TextBody = "Text Body";
+        request.Body.Html = "<h1>Html Header</h1><p>Html Body</p>";
+        request.Body.PlainText = "Text Body";
 
         var result = await _emailSenderService.SendAsync(request);
 
