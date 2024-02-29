@@ -9,5 +9,5 @@ public class SendEmailResponse
 
     public string? ServerResponse { get; init; }
 
-    public bool IsSuccess => ServerResponse is null ? false : ServerResponse.Contains(" queued as");
+    public bool IsSuccess => ServerResponse is null ? false : ServerResponse.StartsWith("2");
 }

@@ -73,7 +73,7 @@ public class SmtpEmailSenderService : IEmailSenderService
 
 
             _logger.LogDebug("Sending email.");
-            var result = await smtp.SendAsync(mimeMessage);
+            var result = await smtp.SendAsync(mimeMessage, cancellationToken);
             _logger.LogInformation("Email successfully sent with response {0}.", result);
 
 
