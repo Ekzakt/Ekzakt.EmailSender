@@ -40,11 +40,30 @@ public static class SendEmailRequestExtentions
     public static string Subject(this SendEmailRequest emailRequest)
     {
         bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        bool isDebug = false;
 
-        var result = isDevelopment
-            ? $"*** DEV {emailRequest.Subject} ***"
-            : emailRequest.Subject;
+#if DEBUG
+        isDebug = true;
+#endif
 
-        return result;
+        var subject = emailRequest.Subject;
+        var status = string.Empty;
+
+        if (isDebug)
+        {
+            status = " DEBUG";
+        }
+
+        if (isDevelopment)
+        {
+            status += " DEV";
+        }
+
+        if (isDebug || isDevelopment)
+        {
+            return $"*** {status.Trim()} *** {subject}";
+        }
+
+        return subject;
     }
 }
