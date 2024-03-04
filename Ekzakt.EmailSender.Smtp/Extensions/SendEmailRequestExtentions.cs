@@ -1,4 +1,5 @@
 ﻿using Ekzakt.EmailSender.Core.Models;
+using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
 
 namespace Ekzakt.EmailSender.Smtp.Extensions;
@@ -40,6 +41,8 @@ public static class SendEmailRequestExtentions
     public static string Subject(this SendEmailRequest emailRequest)
     {
         bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        bool isStaging = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Staging";
+
         bool isDebug = false;
 
 #if DEBUG
@@ -49,19 +52,28 @@ public static class SendEmailRequestExtentions
         var subject = emailRequest.Subject;
         var status = string.Empty;
 
+        List<string> statesList = [];
+
         if (isDebug)
         {
-            status = " DEBUG";
+            statesList.Add("DEBUG");
         }
 
         if (isDevelopment)
         {
-            status += " DEV";
+            statesList.Add("DEV");
         }
 
-        if (isDebug || isDevelopment)
+        if (isStaging)
         {
-            return $"*** {status.Trim()} *** {subject}";
+            statesList.Add("STAGE");
+        }
+
+        var states = string.Join(" - ", statesList);
+
+        if (statesList.Count > 0)
+        {
+            return $"*** {states} *** {subject}";
         }
 
         return subject;

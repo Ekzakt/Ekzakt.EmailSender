@@ -7,7 +7,6 @@ using Ekzakt.EmailSender.Core.Contracts;
 using Microsoft.Extensions.Options;
 using FluentValidation;
 using Ekzakt.EmailSender.Smtp.Extensions;
-using Microsoft.AspNetCore.Server.IIS;
 
 namespace Ekzakt.EmailSender.Smtp.Services;
 
