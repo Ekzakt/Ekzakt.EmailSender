@@ -13,7 +13,13 @@ public class SendEmailRequestValidator : AbstractValidator<SendEmailRequest>
         RuleFor(x => x.Sender)
             .SetValidator(new EmailAddressValidator());
 
+        RuleFor(x => x.Tos.Count)
+            .GreaterThanOrEqualTo(1)
+            .WithMessage("At least one destination address (Tos) must be set.");
+
         RuleForEach(x => x.Tos)
+            .NotNull()
+            .NotEmpty()
             .SetValidator(new EmailAddressValidator());
 
         RuleForEach(x => x.Ccs)

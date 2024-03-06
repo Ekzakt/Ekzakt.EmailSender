@@ -17,4 +17,5 @@ public class SendEmailRequest
 
     public EmailBody Body { get; set; } = new();
 
+    public bool HasSender => !string.IsNullOrEmpty(Sender.Address);
 }

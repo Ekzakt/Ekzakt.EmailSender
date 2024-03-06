@@ -1,11 +1,14 @@
 ﻿using Ekzakt.EmailSender.Core.Models;
-using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
 
 namespace Ekzakt.EmailSender.Smtp.Extensions;
 
 public static class SendEmailRequestExtentions
 {
+    /// <summary>
+    /// This method converts a SendEmailRequest object toa MimeKit.MimeMessage object.
+    /// </summary>
+    /// <returns>MimeKit.MimeMessage</returns>
     public static MimeMessage ToMimeMessage(this SendEmailRequest emailRequest)
     {
         MimeMessage mimeMessage = new();
@@ -13,6 +16,8 @@ public static class SendEmailRequestExtentions
         mimeMessage.Sender = new MailboxAddress(
                 emailRequest?.Sender?.Name ?? string.Empty,
                 emailRequest?.Sender?.Address);
+
+        mimeMessage.From.Add(mimeMessage.Sender);
 
         mimeMessage.To.AddRange(emailRequest?.Tos.ToInternetAddressList());
         mimeMessage.Cc.AddRange(emailRequest?.Ccs?.ToInternetAddressList());
@@ -25,6 +30,11 @@ public static class SendEmailRequestExtentions
     }
 
 
+
+    /// <summary>
+    /// This method converts the body of the SendEmailRequest object to a MimeKit.MailEntity object. 
+    /// </summary>
+    /// <returns>MimeKit.MimeEntity</returns>
     public static MimeEntity ToMimeMessageBody(this SendEmailRequest emailRequest)
     {
         ArgumentException.ThrowIfNullOrEmpty(emailRequest.Body.Html);
@@ -38,6 +48,13 @@ public static class SendEmailRequestExtentions
     }
 
 
+
+    /// <summary>
+    /// This extention method injects parameters into to the subject of the emailrequest
+    /// depending on environment and debug- ore release mode. Nothing will be injects
+    /// when the environment is Production end the release-mode Release.
+    /// </summary>
+    /// <returns>string</returns>
     public static string Subject(this SendEmailRequest emailRequest)
     {
         bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";

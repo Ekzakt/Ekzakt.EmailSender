@@ -14,52 +14,40 @@ public class SmtpEmailSenderService : IEmailSenderService
 {
     private readonly ILogger<SmtpEmailSenderService> _logger;
     private readonly SmtpEmailSenderOptions _options;
-    private readonly IValidator<SendEmailRequest> _sendEmailRequstValidator;
-
-    private SendEmailRequest _sendEmailRequest = new();
+    private readonly IValidator<SmtpEmailSenderOptions> _smtpEmailSenderOptionsValidator;
+    private readonly IValidator<SendEmailRequest> _sendEmailRequestValidator;
 
     public SmtpEmailSenderService(
         ILogger<SmtpEmailSenderService> logger, 
         IOptions<SmtpEmailSenderOptions> options, 
-        IValidator<SmtpEmailSenderOptions> optionsValidator,
+        IValidator<SmtpEmailSenderOptions> smtpEmailSenderOptionsvalidator,
         IValidator<SendEmailRequest> sendEmailRequstValidator)
     {
-        optionsValidator.ValidateAndThrow(options.Value);
-
         _logger = logger;
         _options = options.Value;
-        _sendEmailRequstValidator = sendEmailRequstValidator;
+        _smtpEmailSenderOptionsValidator = smtpEmailSenderOptionsvalidator;
+        _sendEmailRequestValidator = sendEmailRequstValidator;
     }
 
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
-        _sendEmailRequest = sendEmailRequest;
-        _sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
-
-
-        // TODO: This is sooo bad and caused so many issues.
-        // Remove this and when options are invalidate, return
-        // a proper response!
-        _sendEmailRequstValidator.ValidateAndThrow(sendEmailRequest);
-
-        return await SendAsync();
-    }
-
-
-
-
-    #region Helpers
-
-    private async Task<SendEmailResponse> SendAsync(CancellationToken cancellationToken = default)
-    {
-        MimeMessage mimeMessage = _sendEmailRequest.ToMimeMessage();
-
         using var smtp = new SmtpClient();
 
         try
         {
-            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", _sendEmailRequest.Subject, _sendEmailRequest.Tos?.FirstOrDefault()?.Address);
+            _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
+
+            if (!sendEmailRequest.HasSender)
+            {
+                sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
+            }
+
+            _sendEmailRequestValidator.ValidateAndThrow(sendEmailRequest);
+
+            MimeMessage mimeMessage = sendEmailRequest.ToMimeMessage();
+
+            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Subject, sendEmailRequest.Tos?.FirstOrDefault()?.Address);
 
 
             _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
@@ -93,7 +81,4 @@ public class SmtpEmailSenderService : IEmailSenderService
             await smtp.DisconnectAsync(true);
         }
     }
-
-
-    #endregion Helpers
 }

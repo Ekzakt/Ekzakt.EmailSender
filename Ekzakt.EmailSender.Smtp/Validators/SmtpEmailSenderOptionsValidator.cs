@@ -1,4 +1,5 @@
-﻿using Ekzakt.EmailSender.Smtp.Configuration;
+﻿using Regexes = Ekzakt.Utilities.Validation.Regex;
+using Ekzakt.EmailSender.Smtp.Configuration;
 using FluentValidation;
 using System.Text.RegularExpressions;
 
@@ -11,7 +12,8 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
         RuleFor(x => x.SenderAddress)
             .NotNull()
             .NotEmpty()
-            .EmailAddress();
+            .Must(senderaddress => 
+                Regex.Match(senderaddress, Regexes.Internet.EMAIL_ADDRESS).Success);
 
         RuleFor(x => x.Username)
             .NotNull()
@@ -23,9 +25,12 @@ internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSend
             .NotEmpty()
             .Length(1, int.MaxValue);
 
-        RuleFor(x => x.Host).Must(host => 
-            Regex.Match(host, RegexConstants.HOST_NAME).Success || 
-            Regex.Match(host, RegexConstants.IPv4_ADDRESS).Success);
+        RuleFor(x => x.Host)
+            .NotNull()
+            .NotEmpty()
+            .Must(host => 
+                Regex.Match(host, Regexes.Internet.HOST_NAME).Success || 
+                Regex.Match(host, Regexes.Internet.IPv4_ADDRESS).Success);
 
         RuleFor(x => x.Port)
             .InclusiveBetween(1, 65535);
