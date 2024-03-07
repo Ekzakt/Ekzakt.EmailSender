@@ -1,7 +1,10 @@
-﻿namespace Ekzakt.EmailSender.Core.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Ekzakt.EmailSender.Core.Models;
 
 public class SendEmailRequest
 {
+    [JsonIgnore]
     [Obsolete("Use Sender instead. From will be removed in future versions.")]
     public EmailAddress From { get; set; } = new();
 
@@ -17,5 +20,6 @@ public class SendEmailRequest
 
     public EmailBody Body { get; set; } = new();
 
+    [JsonIgnore]
     public bool HasSender => !string.IsNullOrEmpty(Sender.Address);
 }
