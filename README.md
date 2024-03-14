@@ -1,5 +1,8 @@
 # Ekzakt.EmailSender
-Packages for sending emails via SMTP. It is merely a small and simple wrapper around
+
+
+## Description
+This repository contains packages for sending emails via SMTP. It is merely a small and simple wrapper around
 the [MimeKit](https://github.com/jstedfast/MimeKit) and [MailKit](https://github.com/jstedfast/MailKit) repos.
 
 
