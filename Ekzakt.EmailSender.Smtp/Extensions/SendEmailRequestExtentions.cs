@@ -13,10 +13,12 @@ public static class SendEmailRequestExtentions
     {
         MimeMessage mimeMessage = new();
 
+        // TODO: Issue #3.
         mimeMessage.Sender = new MailboxAddress(
                 emailRequest?.Sender?.Name ?? string.Empty,
                 emailRequest?.Sender?.Address);
 
+        // TODO: Issue #3.
         mimeMessage.From.Add(mimeMessage.Sender);
 
         mimeMessage.To.AddRange(emailRequest?.Tos.ToInternetAddressList());
@@ -42,7 +44,7 @@ public static class SendEmailRequestExtentions
         BodyBuilder bodyBuilder = new();
 
         bodyBuilder.HtmlBody = emailRequest.Body.Html;
-        bodyBuilder.TextBody = emailRequest.Body.PlainText ?? string.Empty;
+        bodyBuilder.TextBody = emailRequest.Body.Text ?? string.Empty;
 
         return bodyBuilder.ToMessageBody();
     }

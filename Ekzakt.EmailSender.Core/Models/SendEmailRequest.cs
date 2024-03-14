@@ -4,10 +4,12 @@ namespace Ekzakt.EmailSender.Core.Models;
 
 public class SendEmailRequest
 {
+    // TODO: Issue #3.
     [JsonIgnore]
     [Obsolete("Use Sender instead. From will be removed in future versions.")]
     public EmailAddress From { get; set; } = new();
 
+    // TODO: Issue #3.
     public EmailAddress Sender { get; set; } = new();
 
     public List<EmailAddress> Tos { get; set; } = new();

@@ -53,7 +53,6 @@ public class SmtpEmailSenderService : IEmailSenderService
 
             MimeMessage mimeMessage = sendEmailRequest.ToMimeMessage();
 
-
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
             { 
                 Id = emailId, 
