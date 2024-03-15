@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using MimeKit;
-using MailKit.Net.Smtp;
-using Ekzakt.EmailSender.Smtp.Configuration;
-using Ekzakt.EmailSender.Core.Models;
-using Ekzakt.EmailSender.Core.Contracts;
-using Microsoft.Extensions.Options;
-using FluentValidation;
-using Ekzakt.EmailSender.Smtp.Extensions;
+﻿using Ekzakt.EmailSender.Core.Contracts;
 using Ekzakt.EmailSender.Core.EventArguments;
+using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Smtp.Configuration;
+using Ekzakt.EmailSender.Smtp.Extensions;
+using FluentValidation;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MimeKit;
 
 namespace Ekzakt.EmailSender.Smtp.Services;
 
