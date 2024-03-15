@@ -34,16 +34,16 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
 
-    - name: Run github.run_number with offset
-      env: 
-        GITHUB_RUN_NUMBER: ${{github.run_number}}
-        GITHUB_RUN_NUMBER_OFFSET: 10
-      run: |
-        ::set-env name=GITHUB_RUN_NUMBER_WITH_OFFSET::$(($GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER_OFFSET))
+    # - name: Run github.run_number with offset
+      # env: 
+        # GITHUB_RUN_NUMBER: ${{github.run_number}}
+        # GITHUB_RUN_NUMBER_OFFSET: 10
+      # run: |
+        # ::set-env name=GITHUB_RUN_NUMBER_WITH_OFFSET::$(($GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER_OFFSET))
         
-    - name: Display GITHUB_RUN_NUMBER_WITH_OFFSET
-      run: |
-        echo "$GITHUB_RUN_NUMBER_WITH_OFFSET"
+    # - name: Display GITHUB_RUN_NUMBER_WITH_OFFSET
+      # run: |
+        # echo "$GITHUB_RUN_NUMBER_WITH_OFFSET"
       
     - name: Update Build Number for Ekzakt.EmailSender.Core
       run: sed -i "s/\(<Version>\([0-9]\+\.\)\{2\}\)\([0-9]\+\)/\1${{github.run_number}}/" ./Ekzakt.EmailSender.Core/Ekzakt.EmailSender.Core.csproj
@@ -71,11 +71,11 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4 
 
-      # Download the NuGet package created in the previous job
+      # download the nuget package created in the previous job
       - uses: actions/download-artifact@v3
         with:
           name: nuget
-          path: ${{ env.NuGetDirectory }}
+          path: ${{ env.nugetdirectory }}
 
       - name: Install nuget validator
         run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
