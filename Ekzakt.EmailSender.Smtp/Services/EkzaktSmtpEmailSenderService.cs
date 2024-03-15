@@ -1,31 +1,30 @@
-﻿using Ekzakt.EmailSender.Core.Contracts;
-using Ekzakt.EmailSender.Core.EventArguments;
-using Ekzakt.EmailSender.Core.Models;
-using Ekzakt.EmailSender.Smtp.Configuration;
-using Ekzakt.EmailSender.Smtp.Extensions;
-using FluentValidation;
-using MailKit.Net.Smtp;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
 using MimeKit;
+using MailKit.Net.Smtp;
+using Ekzakt.EmailSender.Smtp.Configuration;
+using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Core.Contracts;
+using Microsoft.Extensions.Options;
+using FluentValidation;
+using Ekzakt.EmailSender.Smtp.Extensions;
+using Ekzakt.EmailSender.Core.EventArguments;
 
 namespace Ekzakt.EmailSender.Smtp.Services;
 
-[Obsolete("User EkzaktSmtpEmailSenderService instead.  This class will be removed in future versions.")]
-public class SmtpEmailSenderService : IEmailSenderService
+public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 {
-    private readonly ILogger<SmtpEmailSenderService> _logger;
-    private readonly SmtpEmailSenderOptions _options;
-    private readonly IValidator<SmtpEmailSenderOptions> _smtpEmailSenderOptionsValidator;
+    private readonly ILogger<EkzaktSmtpEmailSenderService> _logger;
+    private readonly EkzaktSmtpEmailSenderOptions _options;
+    private readonly IValidator<EkzaktSmtpEmailSenderOptions> _smtpEmailSenderOptionsValidator;
     private readonly IValidator<SendEmailRequest> _sendEmailRequestValidator;
 
-    public event IEmailSenderService.AsyncEventHandler<BeforeSendEmailEventArgs>? BeforeEmailSentAsync;
-    public event IEmailSenderService.AsyncEventHandler<AfterSendEmailEventArgs>? AfterEmailSentAsync;
+    public event IEkzaktEmailSenderService.AsyncEventHandler<BeforeSendEmailEventArgs>? BeforeEmailSentAsync;
+    public event IEkzaktEmailSenderService.AsyncEventHandler<AfterSendEmailEventArgs>? AfterEmailSentAsync;
 
-    public SmtpEmailSenderService(
-        ILogger<SmtpEmailSenderService> logger,
-        IOptions<SmtpEmailSenderOptions> options,
-        IValidator<SmtpEmailSenderOptions> smtpEmailSenderOptionsvalidator,
+    public EkzaktSmtpEmailSenderService(
+        ILogger<EkzaktSmtpEmailSenderService> logger, 
+        IOptions<EkzaktSmtpEmailSenderOptions> options, 
+        IValidator<EkzaktSmtpEmailSenderOptions> smtpEmailSenderOptionsvalidator,
         IValidator<SendEmailRequest> sendEmailRequstValidator)
     {
         _logger = logger;
@@ -33,7 +32,6 @@ public class SmtpEmailSenderService : IEmailSenderService
         _smtpEmailSenderOptionsValidator = smtpEmailSenderOptionsvalidator;
         _sendEmailRequestValidator = sendEmailRequstValidator;
     }
-
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
@@ -56,8 +54,8 @@ public class SmtpEmailSenderService : IEmailSenderService
             MimeMessage mimeMessage = sendEmailRequest.ToMimeMessage();
 
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
-            {
-                Id = emailId,
+            { 
+                Id = emailId, 
                 SendEmailRequest = sendEmailRequest
             });
 
@@ -88,7 +86,7 @@ public class SmtpEmailSenderService : IEmailSenderService
         {
             _logger.LogError("Something went wrong while sending and email. Exception: {0}", ex);
 
-            eventMessage = $"Unexpected error. ({ex.GetType().Name})";
+            eventMessage = $"Unexpected error. ({ex.GetType().Name })";
 
             return new SendEmailResponse(ex.Message);
         }
@@ -96,9 +94,9 @@ public class SmtpEmailSenderService : IEmailSenderService
         {
             _logger.LogDebug("Disonnecting from SMTP-server.");
 
-            await OnAfterEmailSentAsync(new AfterSendEmailEventArgs
-            {
-                Id = emailId,
+            await OnAfterEmailSentAsync(new AfterSendEmailEventArgs 
+            { 
+                Id = emailId, 
                 ResponseMessage = eventMessage
             });
 

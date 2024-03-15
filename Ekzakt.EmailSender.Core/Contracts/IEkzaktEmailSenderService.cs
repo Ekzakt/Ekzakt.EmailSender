@@ -3,8 +3,7 @@ using Ekzakt.EmailSender.Core.Models;
 
 namespace Ekzakt.EmailSender.Core.Contracts;
 
-[Obsolete("Use IEkzaktEmailService instead.  This class will be deleted in a future version.")]
-public interface IEmailSenderService
+public interface IEkzaktEmailSenderService
 {
     delegate Task AsyncEventHandler<TEventArgs>(TEventArgs e);
 

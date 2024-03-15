@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace Ekzakt.EmailSender.Smtp.Validators;
 
-internal class SmtpEmailSenderOptionsValidator : AbstractValidator<SmtpEmailSenderOptions>
+internal class EkzaktSmtpEmailSenderOptionsValidator : AbstractValidator<EkzaktSmtpEmailSenderOptions>
 {
-    public SmtpEmailSenderOptionsValidator()
+    public EkzaktSmtpEmailSenderOptionsValidator()
     {
         RuleFor(x => x.SenderAddress)
             .NotNull()

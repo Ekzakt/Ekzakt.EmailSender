@@ -2,8 +2,7 @@
 
 namespace Ekzakt.EmailSender.Smtp.Configuration;
 
-[Obsolete("Use EkzaktSmtpEmailSenderOptions instead. This class will be removed in a future version.")]
-public class SmtpEmailSenderOptions : IEmailSenderOptions
+public class EkzaktSmtpEmailSenderOptions : IEmailSenderOptions
 {
     public const string OptionsName = "Ekzakt:SmtpEmail";
 
@@ -26,4 +25,5 @@ public class SmtpEmailSenderOptions : IEmailSenderOptions
     public int Port { get; set; } = 587;
 
     public bool UseSSL { get; set; } = true;
+
 }

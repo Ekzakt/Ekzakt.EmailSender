@@ -10,6 +10,7 @@ namespace Ekzakt.EmailSender.Smtp.Configuration;
 
 public static class DepencyInjection
 {
+    [Obsolete("Use AddEkzaktSmtpEmailSender instead. This method will be removed in a future versions.")]
     public static IServiceCollection AddSmtpEmailSender(this IServiceCollection services, Action<SmtpEmailSenderOptions> options)
     {
         services.Configure(options);
@@ -20,9 +21,10 @@ public static class DepencyInjection
     }
 
 
+    [Obsolete("Use AddEkzaktSmtpEmailSender instead. This method will be removed in a future versions.")]
     public static IServiceCollection AddSmtpEmailSender(this IServiceCollection services, string? configSectionPath = null)
     {
-        configSectionPath ??= SmtpEmailSenderOptions.OptionsName;
+        configSectionPath ??= EkzaktSmtpEmailSenderOptions.OptionsName;
 
         services
             .AddOptions<SmtpEmailSenderOptions>()
@@ -34,18 +36,55 @@ public static class DepencyInjection
     }
 
 
+    public static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services, Action<EkzaktSmtpEmailSenderOptions> options)
+    {
+        services.Configure(options);
+
+        services.AddEkzaktSmtpEmailSender();
+
+        return services;
+    }
+
+
+     public static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services, string? configSectionPath = null)
+    {
+        configSectionPath ??= EkzaktSmtpEmailSenderOptions.OptionsName;
+
+        services
+            .AddOptions<EkzaktSmtpEmailSenderOptions>()
+            .BindConfiguration(configSectionPath);
+
+        services.AddEkzaktSmtpEmailSender();
+
+        return services;
+    }
 
 
     #region Helpers
 
+    [Obsolete("Use AddEkzaktSmtpEmailSender instead. This method will be removed in a future versions.")]
+
     private static IServiceCollection AddSmtpEmailSender(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<SmtpEmailSenderOptions>, SmtpEmailSenderOptionsValidator>();
+        services.AddScoped<IValidator<EkzaktSmtpEmailSenderOptions>, EkzaktSmtpEmailSenderOptionsValidator>();
         services.AddScoped<IValidator<SendEmailRequest>, SendEmailRequestValidator>();
         services.AddScoped<IValidator<EmailBody>, EmailBodyValidator>();
         services.AddScoped<IValidator<EmailAddress>, EmailAddressValidator>();
 
         services.AddScoped<IEmailSenderService, SmtpEmailSenderService>();
+
+        return services;
+    }
+
+
+    private static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<EkzaktSmtpEmailSenderOptions>, EkzaktSmtpEmailSenderOptionsValidator>();
+        services.AddScoped<IValidator<SendEmailRequest>, SendEmailRequestValidator>();
+        services.AddScoped<IValidator<EmailBody>, EmailBodyValidator>();
+        services.AddScoped<IValidator<EmailAddress>, EmailAddressValidator>();
+
+        services.AddScoped<IEkzaktEmailSenderService, EkzaktSmtpEmailSenderService>();
 
         return services;
     }
