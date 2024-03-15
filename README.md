@@ -26,7 +26,7 @@ dotnet add package Ekzakt.EmailSender.Smtp
     "Password": "<SMTP_PASSWORD>",
     "Host": "<SMTP_HOSTNAME>",
     "Port": "<SMTP_PORTNUMBER>"
-    "UseSSL": <BOOLEAN>
+    "UseSSL": true
   }
 }
 ```
@@ -37,13 +37,13 @@ dotnet add package Ekzakt.EmailSender.Smtp
 
 #### 1. Default
 ``` C#
-builder.Services.AddSmtpEmailSender();
+builder.Services.AddEkzaktSmtpEmailSender();
 ```
 
 
 #### 2. Use a different appsettings.json section name
 ``` C#
-builder.Services.AddSmtpEmailSender(<APPSETTINGS_SECTION_PATH>);
+builder.Services.AddEkzaktSmtpEmailSender("<APPSETTINGS_SECTION_PATH>");
 ```
 where <APPSETTINGS_SECTION_PATH> is the name of the section in your appsettings.json file.
 If <APPSETTINGS_SECTION_PATH> is omitted, the default value "SmtpOptions" is used.
@@ -51,7 +51,7 @@ If <APPSETTINGS_SECTION_PATH> is omitted, the default value "SmtpOptions" is use
 
 #### 3. Use the settings from anywhere you get them:
 ``` C#
-builder.Services.AddSmtpEmailSender(options =>
+builder.Services.AddEkzaktSmtpEmailSender(options =>
 {
     options.SenderAddress = "<SENDER_EMAILADDRESS>";
     options.SenderDisplayName = "<SENDER_DISPLAYNAME>";
@@ -59,18 +59,18 @@ builder.Services.AddSmtpEmailSender(options =>
     options.Password = "<SMTP_PASSWORD>";
     options.Host = "<SMTP_HOSTNAME>";
     options.Port = "<SMTP_PORTNUMBER>";
-    options.UseSSL = <BOOLEAN>
+    options.UseSSL = true;
 });
 ```
 
 
 ### 3. Usage
 ``` C#
-public class Demo(IEmailSenderService emailSenderService)
+public class Demo(IEkzaktEmailSenderService emailSenderService)
 {
-    private readonly IEmailSenderService _emailSenderService = emailSenderService;
+    private readonly IEkzaktEmailSenderService _emailSenderService = emailSenderService;
 
-    public async Task<SendEmailResponse> TriggerEmailAsync()
+    public async Task<SendEmailResponse> SendEmailAsync()
     {
         SendEmailRequest request = new();
 
