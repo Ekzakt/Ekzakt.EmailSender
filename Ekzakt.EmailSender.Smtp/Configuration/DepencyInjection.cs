@@ -66,7 +66,7 @@ public static class DepencyInjection
 
     private static IServiceCollection AddSmtpEmailSender(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<EkzaktSmtpEmailSenderOptions>, EkzaktSmtpEmailSenderOptionsValidator>();
+        services.AddScoped<IValidator<SmtpEmailSenderOptions>, SmtpEmailSenderOptionsValidator>();
         services.AddScoped<IValidator<SendEmailRequest>, SendEmailRequestValidator>();
         services.AddScoped<IValidator<EmailBody>, EmailBodyValidator>();
         services.AddScoped<IValidator<EmailAddress>, EmailAddressValidator>();
