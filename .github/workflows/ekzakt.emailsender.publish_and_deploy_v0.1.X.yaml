@@ -39,7 +39,7 @@ jobs:
         GITHUB_RUN_NUMBER: ${{github.run_number}}
         GITHUB_RUN_NUMBER_OFFSET: 10
       run: |
-        echo ::set-env name=GITHUB_RUN_NUMBER_WITH_OFFSET::$(($GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER_OFFSET))
+        ::set-env name=GITHUB_RUN_NUMBER_WITH_OFFSET::$(($GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER_OFFSET))
         
     - name: Display GITHUB_RUN_NUMBER_WITH_OFFSET
       run: |
