@@ -30,6 +30,7 @@ dotnet add package Ekzakt.EmailSender.Smtp
   }
 }
 ```
+*Reminder: never publish sensitive data online. Use a key vault or environment variables instead.*
 
 
 ### 2. Register the class in program.cs
