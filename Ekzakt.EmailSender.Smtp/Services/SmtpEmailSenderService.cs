@@ -61,9 +61,7 @@ public class SmtpEmailSenderService : IEmailSenderService
                 SendEmailRequest = sendEmailRequest
             });
 
-
             _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Subject, sendEmailRequest.Tos?.FirstOrDefault()?.Address);
-
 
             _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
             await smtp.ConnectAsync(_options.Host, _options.Port, cancellationToken: cancellationToken);
@@ -73,7 +71,6 @@ public class SmtpEmailSenderService : IEmailSenderService
             _logger.LogDebug("Authenticating SMPT-server.");
             await smtp.AuthenticateAsync(_options.Username, _options.Password);
             _logger.LogDebug("Authenticated successfully.");
-
 
             _logger.LogDebug("Sending email.");
             var result = await smtp.SendAsync(mimeMessage, cancellationToken);
