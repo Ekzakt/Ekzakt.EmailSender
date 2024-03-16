@@ -1,5 +1,6 @@
 ﻿using Ekzakt.EmailSender.Core.EventArguments;
-using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Core.Models.Requests;
+using Ekzakt.EmailSender.Core.Models.Responses;
 
 namespace Ekzakt.EmailSender.Core.Contracts;
 

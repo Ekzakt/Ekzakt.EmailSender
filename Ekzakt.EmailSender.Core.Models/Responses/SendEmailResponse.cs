@@ -1,4 +1,4 @@
-﻿namespace Ekzakt.EmailSender.Core.Models;
+﻿namespace Ekzakt.EmailSender.Core.Models.Responses;
 
 public class SendEmailResponse
 {

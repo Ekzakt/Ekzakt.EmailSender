@@ -52,5 +52,9 @@
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Ekzakt.EmailSender.Core.Models\Ekzakt.EmailSender.Core.Models.csproj" />
+	</ItemGroup>
 	
 </Project>

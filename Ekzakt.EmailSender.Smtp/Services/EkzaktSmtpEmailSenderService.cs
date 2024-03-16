@@ -1,6 +1,8 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
 using Ekzakt.EmailSender.Core.EventArguments;
 using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Core.Models.Requests;
+using Ekzakt.EmailSender.Core.Models.Responses;
 using Ekzakt.EmailSender.Smtp.Configuration;
 using Ekzakt.EmailSender.Smtp.Extensions;
 using FluentValidation;
@@ -44,9 +46,9 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
         {
             _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
 
-            if (!sendEmailRequest.HasSender)
+            if (!sendEmailRequest.Email.HasSenderAddress)
             {
-                sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
+                sendEmailRequest.Email.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
             }
 
             _sendEmailRequestValidator.ValidateAndThrow(sendEmailRequest);
@@ -56,11 +58,11 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
             { 
                 Id = emailId, 
-                SendEmailRequest = sendEmailRequest
+                Email = sendEmailRequest.Email
             });
 
 
-            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Subject, sendEmailRequest.Tos?.FirstOrDefault()?.Address);
+            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
 
 
             _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
@@ -79,7 +81,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             eventMessage = result;
 
-            return new SendEmailResponse(result);
+            return new Core.Models.Responses.SendEmailResponse(result);
 
         }
         catch (Exception ex)

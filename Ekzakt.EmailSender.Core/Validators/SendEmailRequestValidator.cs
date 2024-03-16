@@ -1,4 +1,4 @@
-﻿using Ekzakt.EmailSender.Core.Models;
+﻿using Ekzakt.EmailSender.Core.Models.Requests;
 using FluentValidation;
 
 namespace Ekzakt.EmailSender.Core.Validators;
@@ -7,31 +7,29 @@ public class SendEmailRequestValidator : AbstractValidator<SendEmailRequest>
 {
     public SendEmailRequestValidator()
     {
-        RuleFor(x => x.Body.Html)
-            .NotNull().NotEmpty();
-
-        RuleFor(x => x.Sender)
+        RuleFor(x => x.Email.Sender)
             .SetValidator(new EmailAddressValidator());
 
-        RuleFor(x => x.Tos.Count)
+        RuleFor(x => x.Email.Tos.Count)
             .GreaterThanOrEqualTo(1)
             .WithMessage("At least one destination address (Tos) must be set.");
 
-        RuleForEach(x => x.Tos)
+        RuleForEach(x => x.Email.Tos)
             .NotNull()
             .NotEmpty()
             .SetValidator(new EmailAddressValidator());
 
-        RuleForEach(x => x.Ccs)
+        RuleForEach(x => x.Email.Ccs)
             .SetValidator(new EmailAddressValidator());
 
-        RuleForEach(x => x.Bccs)
+        RuleForEach(x => x.Email.Bccs)
             .SetValidator(new EmailAddressValidator());
 
-        RuleFor(x => x.Subject)
-            .NotNull().NotEmpty();
+        RuleFor(x => x.Email.Subject)
+            .NotNull()
+            .NotEmpty();
 
-        RuleFor(x => x.Body)
+        RuleFor(x => x.Email.Body)
             .SetValidator(new EmailBodyValidator());
     }
 }

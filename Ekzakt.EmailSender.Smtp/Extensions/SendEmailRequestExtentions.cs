@@ -1,4 +1,4 @@
-﻿using Ekzakt.EmailSender.Core.Models;
+﻿using Ekzakt.EmailSender.Core.Models.Requests;
 using MimeKit;
 
 namespace Ekzakt.EmailSender.Smtp.Extensions;
@@ -15,15 +15,15 @@ public static class SendEmailRequestExtentions
 
         // TODO: Issue #3.
         mimeMessage.Sender = new MailboxAddress(
-                emailRequest?.Sender?.Name ?? string.Empty,
-                emailRequest?.Sender?.Address);
+                emailRequest?.Email.Sender?.Name ?? string.Empty,
+                emailRequest?.Email.Sender?.Address);
 
         // TODO: Issue #3.
         mimeMessage.From.Add(mimeMessage.Sender);
 
-        mimeMessage.To.AddRange(emailRequest?.Tos.ToInternetAddressList());
-        mimeMessage.Cc.AddRange(emailRequest?.Ccs?.ToInternetAddressList());
-        mimeMessage.Bcc.AddRange(emailRequest?.Bccs?.ToInternetAddressList());
+        mimeMessage.To.AddRange(emailRequest?.Email.Tos.ToInternetAddressList());
+        mimeMessage.Cc.AddRange(emailRequest?.Email.Ccs?.ToInternetAddressList());
+        mimeMessage.Bcc.AddRange(emailRequest?.Email.Bccs?.ToInternetAddressList());
 
         mimeMessage.Subject = emailRequest?.Subject();
         mimeMessage.Body = emailRequest?.ToMimeMessageBody();
@@ -39,12 +39,12 @@ public static class SendEmailRequestExtentions
     /// <returns>MimeKit.MimeEntity</returns>
     public static MimeEntity ToMimeMessageBody(this SendEmailRequest emailRequest)
     {
-        ArgumentException.ThrowIfNullOrEmpty(emailRequest.Body.Html);
+        ArgumentException.ThrowIfNullOrEmpty(emailRequest.Email.Body.Html);
 
         BodyBuilder bodyBuilder = new();
 
-        bodyBuilder.HtmlBody = emailRequest.Body.Html;
-        bodyBuilder.TextBody = emailRequest.Body.Text ?? string.Empty;
+        bodyBuilder.HtmlBody = emailRequest.Email.Body.Html;
+        bodyBuilder.TextBody = emailRequest.Email.Body.Text ?? string.Empty;
 
         return bodyBuilder.ToMessageBody();
     }
@@ -52,7 +52,7 @@ public static class SendEmailRequestExtentions
 
 
     /// <summary>
-    /// This extention method injects parameters into to the subject of the emailrequest
+    /// This extention method injects string values into to the subject of the emailrequest
     /// depending on environment and debug- ore release mode. Nothing will be injects
     /// when the environment is Production end the release-mode Release.
     /// </summary>
@@ -68,7 +68,7 @@ public static class SendEmailRequestExtentions
         isDebug = true;
 #endif
 
-        var subject = emailRequest.Subject;
+        var subject = emailRequest.Email.Subject;
         var status = string.Empty;
 
         List<string> statesList = [];

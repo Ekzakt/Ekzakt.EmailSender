@@ -1,6 +1,8 @@
 ﻿using Ekzakt.EmailSender.Core.Contracts;
 using Ekzakt.EmailSender.Core.EventArguments;
 using Ekzakt.EmailSender.Core.Models;
+using Ekzakt.EmailSender.Core.Models.Requests;
+using Ekzakt.EmailSender.Core.Models.Responses;
 using Ekzakt.EmailSender.Smtp.Configuration;
 using Ekzakt.EmailSender.Smtp.Extensions;
 using FluentValidation;
@@ -12,15 +14,15 @@ using MimeKit;
 namespace Ekzakt.EmailSender.Smtp.Services;
 
 [Obsolete("User EkzaktSmtpEmailSenderService instead.  This class will be removed in future versions.")]
-public class SmtpEmailSenderService : IEmailSenderService
+public class SmtpEmailSenderService : IEkzaktEmailSenderService
 {
     private readonly ILogger<SmtpEmailSenderService> _logger;
     private readonly SmtpEmailSenderOptions _options;
     private readonly IValidator<SmtpEmailSenderOptions> _smtpEmailSenderOptionsValidator;
     private readonly IValidator<SendEmailRequest> _sendEmailRequestValidator;
 
-    public event IEmailSenderService.AsyncEventHandler<BeforeSendEmailEventArgs>? BeforeEmailSentAsync;
-    public event IEmailSenderService.AsyncEventHandler<AfterSendEmailEventArgs>? AfterEmailSentAsync;
+    public event IEkzaktEmailSenderService.AsyncEventHandler<BeforeSendEmailEventArgs>? BeforeEmailSentAsync;
+    public event IEkzaktEmailSenderService.AsyncEventHandler<AfterSendEmailEventArgs>? AfterEmailSentAsync;
 
     public SmtpEmailSenderService(
         ILogger<SmtpEmailSenderService> logger,
@@ -46,9 +48,9 @@ public class SmtpEmailSenderService : IEmailSenderService
         {
             _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
 
-            if (!sendEmailRequest.HasSender)
+            if (!sendEmailRequest.Email.HasSenderAddress)
             {
-                sendEmailRequest.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
+                sendEmailRequest.Email.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
             }
 
             _sendEmailRequestValidator.ValidateAndThrow(sendEmailRequest);
@@ -58,10 +60,10 @@ public class SmtpEmailSenderService : IEmailSenderService
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
             {
                 Id = emailId,
-                SendEmailRequest = sendEmailRequest
+                Email = sendEmailRequest.Email
             });
 
-            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Subject, sendEmailRequest.Tos?.FirstOrDefault()?.Address);
+            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
 
             _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
             await smtp.ConnectAsync(_options.Host, _options.Port, cancellationToken: cancellationToken);

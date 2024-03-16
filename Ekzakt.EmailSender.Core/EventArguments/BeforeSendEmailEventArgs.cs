@@ -6,5 +6,5 @@ public class BeforeSendEmailEventArgs : EventArgs
 {
     public Guid Id { get; init; }
 
-    public SendEmailRequest SendEmailRequest { get; init; } = new();
+    public Email Email { get; init; } = new();
 }
