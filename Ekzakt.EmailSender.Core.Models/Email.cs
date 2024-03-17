@@ -4,6 +4,8 @@ namespace Ekzakt.EmailSender.Core.Models;
 
 public class Email
 {
+    public Guid? Id { get; private set; }
+
     public EmailAddress From { get; set; } = new();
 
     public EmailAddress Sender { get; set; } = new();
@@ -19,10 +21,21 @@ public class Email
     public EmailBody Body { get; set; } = new();
 
 
+    public void SetEmailId(Guid id)
+    {
+        if (Id is null)
+        {
+            Id = id;
+        }
+    }
+
+
     [JsonIgnore]
     public bool HasFromAddress => !string.IsNullOrEmpty(From.Address);
 
 
     [JsonIgnore]
     public bool HasSenderAddress => !string.IsNullOrEmpty(Sender.Address);
+
+    
 }

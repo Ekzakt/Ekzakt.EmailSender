@@ -38,14 +38,15 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
     public async Task<SendEmailResponse> SendAsync(SendEmailRequest sendEmailRequest, CancellationToken cancellationToken = default)
     {
-        var emailId = Guid.NewGuid();
+        sendEmailRequest.Email.SetEmailId(Guid.NewGuid());
+
         var eventMessage = string.Empty;
 
         using var smtp = new SmtpClient();
 
         try
         {
-            _logger.LogInformation("Attempting to send an email with id {EmailId} subject \"{EmailSubject}\" to \"{To}\".", emailId, sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
+            _logger.LogInformation("Attempting to send an email with id {EmailId} subject \"{EmailSubject}\" to \"{To}\".", sendEmailRequest.Email.Id, sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
 
             _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
 
@@ -59,8 +60,8 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
             MimeMessage message = sendEmailRequest.ToMimeMessage();
 
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
-            { 
-                Id = emailId, 
+            {
+                Id = sendEmailRequest.Email.Id ?? Guid.Empty,
                 Email = sendEmailRequest.Email
             });
 
@@ -68,28 +69,28 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             await SmtpAuthenciateAsync(smtp, cancellationToken);
 
-            var result = await SmtpSendAsync(smtp, message, cancellationToken);
+            var result = await SmtpSendAsync(smtp, message, sendEmailRequest.Email.Id, cancellationToken);
 
             eventMessage = result;
 
-            return new SendEmailResponse(emailId, result);
+            return new SendEmailResponse(sendEmailRequest.Email.Id, result);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError("Something went wrong while sending the email with id {EmailId}. Exception: {Exception}", emailId, ex);
+            _logger.LogError("Something went wrong while sending the email with id {EmailId}. Exception: {Exception}", sendEmailRequest.Email.Id, ex);
 
             eventMessage = $"Unexpected error. ({ex.GetType().Name })";
 
-            return new SendEmailResponse(emailId, ex.Message);
+            return new SendEmailResponse(sendEmailRequest.Email.Id, ex.Message);
         }
         finally
         {
             _logger.LogDebug("Disonnecting from SMTP-server.");
 
-            await OnAfterEmailSentAsync(new AfterSendEmailEventArgs 
-            { 
-                Id = emailId, 
+            await OnAfterEmailSentAsync(new AfterSendEmailEventArgs
+            {
+                Id = sendEmailRequest.Email.Id ?? Guid.Empty,
                 ResponseMessage = eventMessage
             });
 
@@ -138,13 +139,17 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
     }
 
 
-    private async Task<string?> SmtpSendAsync(SmtpClient smtpClient, MimeMessage mimeMessage, CancellationToken cancellationToken)
+    private async Task<string?> SmtpSendAsync(SmtpClient smtpClient, MimeMessage mimeMessage, Guid? emailId, CancellationToken cancellationToken)
     {
-         _logger.LogDebug("Sending email.");
-        var result = await smtpClient.SendAsync(mimeMessage, cancellationToken);
-        _logger.LogInformation("Email successfully sent with response {0}.", result);
+        var id = emailId ?? Guid.NewGuid();
 
-        return result;
+         _logger.LogDebug("Sending email width id {EmailId}.", id);
+
+        var serverResponse = await smtpClient.SendAsync(mimeMessage, cancellationToken);
+
+        _logger.LogDebug("Email width id {EmailId} successfully sent with response {ServerResponse}.", id, serverResponse);
+
+        return serverResponse;
     }
 
 
