@@ -4,7 +4,7 @@ namespace Ekzakt.EmailSender.Core.Models;
 
 public class Email
 {
-    public Guid? Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
     public EmailAddress From { get; set; } = new();
 
@@ -23,7 +23,7 @@ public class Email
 
     public void SetEmailId(Guid id)
     {
-        if (Id is null)
+        if (Id.Equals(Guid.Empty))
         {
             Id = id;
         }
