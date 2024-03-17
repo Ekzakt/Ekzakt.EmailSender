@@ -72,7 +72,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             eventMessage = result;
 
-            return new SendEmailResponse(result);
+            return new SendEmailResponse(emailId, result);
 
         }
         catch (Exception ex)
@@ -81,7 +81,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             eventMessage = $"Unexpected error. ({ex.GetType().Name })";
 
-            return new SendEmailResponse(ex.Message);
+            return new SendEmailResponse(emailId, ex.Message);
         }
         finally
         {
