@@ -2,7 +2,7 @@
 
 public class SendEmailResponse
 {
-    public SendEmailResponse(string serverResponse)
+    public SendEmailResponse(string? serverResponse)
     {
         ServerResponse = serverResponse;    
     }

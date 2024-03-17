@@ -10,6 +10,7 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Threading;
 
 namespace Ekzakt.EmailSender.Smtp.Services;
 
@@ -44,6 +45,8 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
         try
         {
+            _logger.LogInformation("Attempting to send an email with id {EmailId} subject \"{EmailSubject}\" to \"{To}\".", emailId, sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
+
             _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
 
             if (!sendEmailRequest.Email.HasSenderAddress)
@@ -53,7 +56,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             _sendEmailRequestValidator.ValidateAndThrow(sendEmailRequest);
 
-            MimeMessage mimeMessage = sendEmailRequest.ToMimeMessage();
+            MimeMessage message = sendEmailRequest.ToMimeMessage();
 
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
             { 
@@ -61,32 +64,20 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
                 Email = sendEmailRequest.Email
             });
 
+            await SmtpConnectAsync(smtp, cancellationToken);
 
-            _logger.LogInformation("Sending email with subject \"{0}\" to \"{1}\".", sendEmailRequest.Email.Subject, sendEmailRequest.Email.Tos?.FirstOrDefault()?.Address);
+            await SmtpAuthenciateAsync(smtp, cancellationToken);
 
-
-            _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
-            await smtp.ConnectAsync(_options.Host, _options.Port, cancellationToken: cancellationToken);
-            _logger.LogDebug("Connected successfully.");
-
-
-            _logger.LogDebug("Authenticating SMPT-server.");
-            await smtp.AuthenticateAsync(_options.Username, _options.Password);
-            _logger.LogDebug("Authenticated successfully.");
-
-
-            _logger.LogDebug("Sending email.");
-            var result = await smtp.SendAsync(mimeMessage, cancellationToken);
-            _logger.LogInformation("Email successfully sent with response {0}.", result);
+            var result = await SmtpSendAsync(smtp, message, cancellationToken);
 
             eventMessage = result;
 
-            return new Core.Models.Responses.SendEmailResponse(result);
+            return new SendEmailResponse(result);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError("Something went wrong while sending and email. Exception: {0}", ex);
+            _logger.LogError("Something went wrong while sending the email with id {EmailId}. Exception: {Exception}", emailId, ex);
 
             eventMessage = $"Unexpected error. ({ex.GetType().Name })";
 
@@ -129,6 +120,33 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
             await AfterEmailSentAsync(e);
         }
     }
+
+
+    private async Task SmtpConnectAsync(SmtpClient smtpClient, CancellationToken cancellationToken)
+    {
+        _logger.LogDebug("Connecting to SMTP-server {0.Host} on port {1}.", _options.Host, _options.Port);
+        await smtpClient.ConnectAsync(_options.Host, _options.Port, cancellationToken: cancellationToken);
+        _logger.LogDebug("Connected successfully.");
+    }
+
+
+    private async Task SmtpAuthenciateAsync(SmtpClient smtpClient, CancellationToken cancellationToken)
+    {
+        _logger.LogDebug("Authenticating SMPT-server.");
+        await smtpClient.AuthenticateAsync(_options.Username, _options.Password);
+        _logger.LogDebug("Authenticated successfully.");
+    }
+
+
+    private async Task<string?> SmtpSendAsync(SmtpClient smtpClient, MimeMessage mimeMessage, CancellationToken cancellationToken)
+    {
+         _logger.LogDebug("Sending email.");
+        var result = await smtpClient.SendAsync(mimeMessage, cancellationToken);
+        _logger.LogInformation("Email successfully sent with response {0}.", result);
+
+        return result;
+    }
+
 
     #endregion Helpers
 }
