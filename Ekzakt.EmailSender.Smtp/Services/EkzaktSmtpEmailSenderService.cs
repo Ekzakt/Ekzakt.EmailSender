@@ -61,7 +61,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
             {
-                Id = sendEmailRequest.Email.Id ?? Guid.Empty,
+                Id = sendEmailRequest.Email.Id,
                 Email = sendEmailRequest.Email
             });
 
@@ -90,7 +90,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             await OnAfterEmailSentAsync(new AfterSendEmailEventArgs
             {
-                Id = sendEmailRequest.Email.Id ?? Guid.Empty,
+                Id = sendEmailRequest.Email.Id,
                 ResponseMessage = eventMessage
             });
 
