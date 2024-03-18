@@ -50,6 +50,12 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             _smtpEmailSenderOptionsValidator.ValidateAndThrow(_options);
 
+            await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
+            {
+                Id = sendEmailRequest.Email.Id,
+                Email = sendEmailRequest.Email
+            });
+
             if (!sendEmailRequest.Email.HasSenderAddress)
             {
                 sendEmailRequest.Email.Sender = new EmailAddress(_options.SenderAddress, _options.SenderDisplayName);
@@ -59,11 +65,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             MimeMessage message = sendEmailRequest.ToMimeMessage();
 
-            await OnBeforeEmailSentAsync(new BeforeSendEmailEventArgs
-            {
-                Id = sendEmailRequest.Email.Id,
-                Email = sendEmailRequest.Email
-            });
+
 
             await SmtpConnectAsync(smtp, cancellationToken);
 

@@ -7,6 +7,14 @@ public class SendEmailRequestValidator : AbstractValidator<SendEmailRequest>
 {
     public SendEmailRequestValidator()
     {
+        RuleFor(x => x.TemplateName)
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(x => x.RecipientType)
+            .NotNull()
+            .NotEmpty();
+
         RuleFor(x => x.Email.Sender)
             .SetValidator(new EmailAddressValidator());
 
