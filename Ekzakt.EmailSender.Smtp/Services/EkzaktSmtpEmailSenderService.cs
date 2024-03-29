@@ -10,7 +10,7 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System.Threading;
+
 
 namespace Ekzakt.EmailSender.Smtp.Services;
 
@@ -65,10 +65,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
 
             MimeMessage message = sendEmailRequest.ToMimeMessage();
 
-
-
             await SmtpConnectAsync(smtp, cancellationToken);
-
             await SmtpAuthenciateAsync(smtp, cancellationToken);
 
             var result = await SmtpSendAsync(smtp, message, sendEmailRequest.Email.Id, cancellationToken);
