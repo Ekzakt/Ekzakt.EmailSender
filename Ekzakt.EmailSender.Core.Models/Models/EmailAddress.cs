@@ -16,7 +16,7 @@ public class EmailAddress
         Name = name;
     }
 
-    
+
     public string Address { get; init; } = string.Empty;
 
     public string? Name { get; init; } = string.Empty;
