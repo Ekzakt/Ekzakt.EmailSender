@@ -37,5 +37,5 @@ public class Email
     [JsonIgnore]
     public bool HasSenderAddress => !string.IsNullOrEmpty(Sender.Address);
 
-    
+
 }
