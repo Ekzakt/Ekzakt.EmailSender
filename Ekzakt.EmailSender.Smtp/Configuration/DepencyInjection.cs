@@ -37,6 +37,7 @@ public static class DepencyInjection
     }
 
 
+    [Obsolete("Use AddEkzaktEmailSenderSmtp instead. This method will be removed in a future version.")]
     public static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services, Action<EkzaktSmtpEmailSenderOptions> options)
     {
         services.Configure(options);
@@ -47,12 +48,13 @@ public static class DepencyInjection
     }
 
 
-     public static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services, string? configSectionPath = null)
+    [Obsolete("Use AddEkzaktEmailSenderSmtp instead. This method will be removed in a future version.")]
+    public static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services, string? configSectionPath = null)
     {
-        configSectionPath ??= EkzaktSmtpEmailSenderOptions.OptionsName;
+        configSectionPath ??= EkzaktEmailSenderSmtpOptions.OptionsName;
 
         services
-            .AddOptions<EkzaktSmtpEmailSenderOptions>()
+            .AddOptions<EkzaktEmailSenderSmtpOptions>()
             .BindConfiguration(configSectionPath);
 
         services.AddEkzaktSmtpEmailSender();
@@ -61,16 +63,39 @@ public static class DepencyInjection
     }
 
 
+    public static IServiceCollection AddEkzaktEmailSenderSmtp(this IServiceCollection services, Action<EkzaktEmailSenderSmtpOptions> options)
+    {
+        services.Configure(options);
+
+        services.AddEkzaktSmtpEmailSender();
+
+        return services;
+    }
+
+
+    public static IServiceCollection AddEkzaktEmailSenderSmtp(this IServiceCollection services, string? configSectionPath = null)
+    {
+        configSectionPath ??= EkzaktEmailSenderSmtpOptions.OptionsName;
+
+        services
+            .AddOptions<EkzaktEmailSenderSmtpOptions>()
+            .BindConfiguration(configSectionPath);
+
+        services.AddEkzaktSmtpEmailSender();
+
+        return services;
+    }
+
     #region Helpers
 
     private static IServiceCollection AddEkzaktSmtpEmailSender(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<EkzaktSmtpEmailSenderOptions>, EkzaktSmtpEmailSenderOptionsValidator>();
+        services.AddScoped<IValidator<EkzaktEmailSenderSmtpOptions>, EkzaktEmailSenderSmtpOptionsValidator>();
         services.AddScoped<IValidator<SendEmailRequest>, SendEmailRequestValidator>();
         services.AddScoped<IValidator<EmailBody>, EmailBodyValidator>();
         services.AddScoped<IValidator<EmailAddress>, EmailAddressValidator>();
 
-        services.AddScoped<IEkzaktEmailSenderService, EkzaktSmtpEmailSenderService>();
+        services.AddScoped<IEkzaktEmailSenderService, EkzaktEmailSenderSmtpService>();
 
         return services;
     }

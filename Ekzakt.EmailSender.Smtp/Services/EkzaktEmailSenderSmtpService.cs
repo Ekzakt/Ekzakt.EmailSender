@@ -11,24 +11,22 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-
 namespace Ekzakt.EmailSender.Smtp.Services;
 
-[Obsolete("Use EkzaktEmailSenderSmtpService. This class will be removed in a future version.")]
-public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
+public class EkzaktEmailSenderSmtpService : IEkzaktEmailSenderService
 {
-    private readonly ILogger<EkzaktSmtpEmailSenderService> _logger;
-    private readonly EkzaktSmtpEmailSenderOptions _options;
-    private readonly IValidator<EkzaktSmtpEmailSenderOptions> _smtpEmailSenderOptionsValidator;
+    private readonly ILogger<EkzaktEmailSenderSmtpService> _logger;
+    private readonly EkzaktEmailSenderSmtpOptions _options;
+    private readonly IValidator<EkzaktEmailSenderSmtpOptions> _smtpEmailSenderOptionsValidator;
     private readonly IValidator<SendEmailRequest> _sendEmailRequestValidator;
 
     public event IEkzaktEmailSenderService.AsyncEventHandler<BeforeSendEmailEventArgs>? BeforeEmailSentAsync;
     public event IEkzaktEmailSenderService.AsyncEventHandler<AfterSendEmailEventArgs>? AfterEmailSentAsync;
 
-    public EkzaktSmtpEmailSenderService(
-        ILogger<EkzaktSmtpEmailSenderService> logger, 
-        IOptions<EkzaktSmtpEmailSenderOptions> options, 
-        IValidator<EkzaktSmtpEmailSenderOptions> smtpEmailSenderOptionsvalidator,
+    public EkzaktEmailSenderSmtpService(
+        ILogger<EkzaktEmailSenderSmtpService> logger,
+        IOptions<EkzaktEmailSenderSmtpOptions> options,
+        IValidator<EkzaktEmailSenderSmtpOptions> smtpEmailSenderOptionsvalidator,
         IValidator<SendEmailRequest> sendEmailRequstValidator)
     {
         _logger = logger;
@@ -80,7 +78,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
         {
             _logger.LogError("Something went wrong while sending the email with id {EmailId}. Exception: {Exception}", sendEmailRequest.Email.Id, ex);
 
-            eventMessage = $"Unexpected error. ({ex.GetType().Name })";
+            eventMessage = $"Unexpected error. ({ex.GetType().Name})";
 
             return new SendEmailResponse(sendEmailRequest.Email.Id, ex.Message);
         }
@@ -143,7 +141,7 @@ public class EkzaktSmtpEmailSenderService : IEkzaktEmailSenderService
     {
         var id = emailId ?? Guid.NewGuid();
 
-         _logger.LogDebug("Sending email width id {EmailId}.", id);
+        _logger.LogDebug("Sending email width id {EmailId}.", id);
 
         var serverResponse = await smtpClient.SendAsync(mimeMessage, cancellationToken);
 

@@ -2,7 +2,6 @@
 
 public class SendEmailResponse
 {
-
     public Guid? Id { get; set; }
 
     public string? ServerResponse { get; init; }
