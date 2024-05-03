@@ -2,6 +2,7 @@
 
 namespace Ekzakt.EmailSender.Smtp.Configuration;
 
+[Obsolete("Use EkzaktEmailSenderSmtpOptions instead. This class will be deleted in a future version.")]
 public class EkzaktSmtpEmailSenderOptions : IEmailSenderOptions
 {
     public const string OptionsName = "Ekzakt:SmtpEmail";
